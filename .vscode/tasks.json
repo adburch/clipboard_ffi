@@ -12,7 +12,8 @@
           "/Fe:",
           "clipboard.exe",
           "main.cpp",
-          "User32.lib"
+          "User32.lib",
+          "clipboard_rs/target/debug/clipboard_rs.lib"
         ],
         "group": {
           "kind": "build",
