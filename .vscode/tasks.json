@@ -8,6 +8,7 @@
         "args": [
           "/EHsc",
           "/Zi",
+          "/std:c++17",
           "/Fe:",
           "clipboard.exe",
           "main.cpp",
