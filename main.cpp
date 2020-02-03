@@ -34,6 +34,32 @@ Usage()
 
 const std::set<std::wstring> c_FlagsWithArguments{ L"-file", L"-text" };
 
+struct ErrorRecord
+{
+    PCWSTR Message;
+    DWORD ErrorCode;
+    ULONG LineNumber;
+    PSTR Function;
+};
+
+void
+ReportError(ErrorRecord Rec)
+{
+    wchar_t buffer[256]{};
+    FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+                   nullptr,
+                   Rec.ErrorCode,
+                   0,
+                   buffer,
+                   _countof(buffer),
+                   nullptr);
+    fprintf_s(stderr, "%s:%d: %ls: %ls\n", Rec.Function, Rec.LineNumber, Rec.Message, buffer);
+}
+
+#define ReportErr( Msg, Code) { \
+    ReportError( { Msg, Code, __LINE__, __FUNCTION__}); \
+}
+
 void
 PrintClipboardText()
 {
@@ -41,14 +67,14 @@ PrintClipboardText()
     if (!success)
     {
        auto error = GetLastError();
-       wprintf_s(L"Failed to open clipboard: %x", error);
+       ReportErr(L"Failed to open clipboard: %x", error);
        return;
     }
 
     if (!IsClipboardFormatAvailable(CF_UNICODETEXT))
     {
         auto error = GetLastError();
-        wprintf_s(L"No text on clipboard: %x", error);
+        ReportErr(L"No text on clipboard: %x", error);
         return;
     }
 
