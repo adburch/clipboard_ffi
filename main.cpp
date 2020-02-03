@@ -5,6 +5,15 @@
 
 #include <windows.h>
 
+extern "C"
+{
+    void
+    print_clipboard_file(
+        PCWCHAR filename,
+        SIZE_T len
+    );
+}
+
 
 [[noreturn]] void
 Usage()
@@ -176,6 +185,7 @@ int wmain(int argc, const wchar_t** argv)
         else
         {
             // Print to a file
+            print_clipboard_file(filename.c_str(), filename.length());
         }
     }
     else if (!_wcsicmp(command, L"copy"))
