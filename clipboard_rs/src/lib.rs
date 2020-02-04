@@ -13,7 +13,7 @@ pub extern "C" fn print_clipboard_file(filename: *const u16, len: usize) {
     if let Ok(filename) = filename_os.into_string() {
         println!("filename is {}", filename);
     } else {
-        println!("borkde")
+        println!("filename is incorrect")
     }
 }
 
