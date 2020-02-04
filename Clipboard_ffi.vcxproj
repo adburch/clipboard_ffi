@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <ProjectGuid>{FB27B42B-FB81-4157-BF93-EA3D1AF4E903}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <CustomBuildBeforeTargets>Build</CustomBuildBeforeTargets>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalOptions>/std:c++17 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;clipboard_rs\target\x86_64-pc-windows-msvc\debug\clipboard_rs.lib;ws2_32.lib;Userenv.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <CustomBuildStep>
+      <Command>cargo.exe build --manifest-path clipboard_rs/Cargo.toml</Command>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Message>Build Rust library</Message>
+    </CustomBuildStep>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="clipboard_rs\target\debug\incremental\clipboard_rs-2kv9gaslx7faf\s-fkbckh5vsi-8vd0w8-ybt40rwat43r\dep-graph.bin" />
+    <None Include="clipboard_rs\target\debug\incremental\clipboard_rs-2kv9gaslx7faf\s-fkbckh5vsi-8vd0w8-ybt40rwat43r\query-cache.bin" />
+    <None Include="clipboard_rs\target\debug\incremental\clipboard_rs-2kv9gaslx7faf\s-fkbckh5vsi-8vd0w8-ybt40rwat43r\work-products.bin" />
+    <None Include="clipboard_rs\target\debug\incremental\clipboard_rs-33gzb6fj9un52\s-fka8onwubi-ap1gm3-1psotdpcc1lnn\dep-graph.bin" />
+    <None Include="clipboard_rs\target\debug\incremental\clipboard_rs-33gzb6fj9un52\s-fka8onwubi-ap1gm3-1psotdpcc1lnn\query-cache.bin" />
+    <None Include="clipboard_rs\target\debug\incremental\clipboard_rs-33gzb6fj9un52\s-fka8onwubi-ap1gm3-1psotdpcc1lnn\work-products.bin" />
+    <None Include="clipboard_rs\target\debug\incremental\clipboard_rs-3cn4z173w1nqs\s-fkbwkabnqq-1e2qj5l-guqjql22uq0k\dep-graph.bin" />
+    <None Include="clipboard_rs\target\debug\incremental\clipboard_rs-3cn4z173w1nqs\s-fkbwkabnqq-1e2qj5l-guqjql22uq0k\query-cache.bin" />
+    <None Include="clipboard_rs\target\debug\incremental\clipboard_rs-3cn4z173w1nqs\s-fkbwkabnqq-1e2qj5l-guqjql22uq0k\work-products.bin" />
+    <None Include="clipboard_rs\target\x86_64-pc-windows-msvc\debug\incremental\clipboard_rs-1gkc6l5npj8yy\s-fkcd1dwwcf-1js0dpm-tjdklc6lqjyq\dep-graph.bin" />
+    <None Include="clipboard_rs\target\x86_64-pc-windows-msvc\debug\incremental\clipboard_rs-1gkc6l5npj8yy\s-fkcd1dwwcf-1js0dpm-tjdklc6lqjyq\query-cache.bin" />
+    <None Include="clipboard_rs\target\x86_64-pc-windows-msvc\debug\incremental\clipboard_rs-1gkc6l5npj8yy\s-fkcd1dwwcf-1js0dpm-tjdklc6lqjyq\work-products.bin" />
+    <None Include="clipboard_rs\target\x86_64-pc-windows-msvc\debug\incremental\clipboard_rs-1yac9nf0k4f1a\s-fkbwmcmw2u-1wwz9sj-1go55oiz8ha4l\dep-graph.bin" />
+    <None Include="clipboard_rs\target\x86_64-pc-windows-msvc\debug\incremental\clipboard_rs-1yac9nf0k4f1a\s-fkbwmcmw2u-1wwz9sj-1go55oiz8ha4l\query-cache.bin" />
+    <None Include="clipboard_rs\target\x86_64-pc-windows-msvc\debug\incremental\clipboard_rs-1yac9nf0k4f1a\s-fkbwmcmw2u-1wwz9sj-1go55oiz8ha4l\work-products.bin" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

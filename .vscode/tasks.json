@@ -14,8 +14,6 @@
           "main.cpp",
           "User32.lib",
           "clipboard_rs/target/debug/clipboard_rs.lib",
-          "/link",
-          "/MACHINE:x64",
         ],
         "group": {
           "kind": "build",
@@ -34,6 +32,8 @@
           "build",
           "--manifest-path",
           "clipboard_rs/Cargo.toml",
+          "--target",
+          "x86_64-pc-windows-msvc"
         ],
         "group": {
           "kind": "build",

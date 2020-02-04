@@ -47,7 +47,7 @@ struct ErrorRecord
 {
     PCWSTR Message;
     DWORD ErrorCode;
-    ULONG LineNumber;
+    DWORD LineNumber;
     PSTR Function;
 };
 
@@ -66,7 +66,7 @@ ReportError(ErrorRecord Rec)
 }
 
 #define ReportErr( Msg, Code) { \
-    ReportError( { Msg, Code, __LINE__, __FUNCTION__}); \
+    ReportError( { Msg, Code, (DWORD)__LINE__, __FUNCTION__}); \
 }
 
 void
@@ -75,15 +75,15 @@ PrintClipboardText()
     auto success = OpenClipboard(nullptr);
     if (!success)
     {
-       auto error = GetLastError();
-       ReportErr(L"Failed to open clipboard: %x", error);
+       DWORD error = GetLastError();
+       ReportErr(L"Failed to open clipboard", error);
        return;
     }
 
     if (!IsClipboardFormatAvailable(CF_UNICODETEXT))
     {
-        auto error = GetLastError();
-        ReportErr(L"No text on clipboard: %x", error);
+        DWORD error = GetLastError();
+        ReportErr(L"No text on clipboard", error);
         return;
     }
 
