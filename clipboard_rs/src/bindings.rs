@@ -1,7 +1,9 @@
 use std::ffi::c_void;
 
-extern "C" {
+extern "system" {
     pub fn OpenClipboard(hWndNewOwner: u32) -> u32;
+
+    pub fn GetLastError() -> u32;
 
     pub fn IsClipboardFormatAvailable(format: u32) -> u32;
 
@@ -13,3 +15,9 @@ extern "C" {
 
     pub fn CloseClipboard();
 }
+
+// pub struct ClipboardOpener{}
+
+// impl ClipboardOpener {
+//     pub fn new(Option<u32>)
+// }
