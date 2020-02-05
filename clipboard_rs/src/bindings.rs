@@ -1,4 +1,6 @@
 use std::ffi::c_void;
+use winapi::um::winuser::{IsClipboardFormatAvailable,GetClipboardData};
+use winapi::um::winbase::{GlobalLock,GlobalUnlock};
 
 extern "system" {
     pub fn OpenClipboard(hWndNewOwner: u32) -> u32;
@@ -33,13 +35,13 @@ impl Drop for ClipboardOpener {
 }
 
 
-extern "system" {
+// extern "system" {
 
-    pub fn IsClipboardFormatAvailable(format: u32) -> u32;
+//     pub fn IsClipboardFormatAvailable(format: u32) -> u32;
 
-    pub fn GetClipboardData(format: u32) -> u32;
+//     pub fn GetClipboardData(format: u32) -> u32;
 
-    pub fn GlobalLock(hMem: u32) -> *mut c_void;
+//     pub fn GlobalLock(hMem: u32) -> *mut c_void;
 
-    pub fn GlobalUnlock(hMem: u32);
-}
+//     pub fn GlobalUnlock(hMem: u32);
+// }
