@@ -75,16 +75,8 @@ PrintClipboardText()
     auto success = OpenClipboard(nullptr);
     if (!success)
     {
-       DWORD error = GetLastError();
-       ReportErr(L"Failed to open clipboard", error);
+       ReportErr(L"Failed to open clipboard", GetLastError());
        return;
-    }
-
-    if (!IsClipboardFormatAvailable(CF_UNICODETEXT))
-    {
-        DWORD error = GetLastError();
-        ReportErr(L"No text on clipboard", error);
-        return;
     }
 
     auto hglb = GetClipboardData(CF_UNICODETEXT);
@@ -93,9 +85,15 @@ PrintClipboardText()
         LPCWSTR text = (LPCWSTR)GlobalLock(hglb);
         if (text != NULL)
         {
-            wprintf_s(L"Clipboard data: %wS", text);
+            wprintf_s(L"Clipboard data:\n\n%wS\n", text);
             GlobalUnlock(hglb);
         }
+    }
+    else 
+    {
+        ReportErr(L"No text on clipboard", GetLastError());
+        return;
+
     }
     CloseClipboard();
 

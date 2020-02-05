@@ -1,6 +1,11 @@
-use std::ffi::c_void;
-use winapi::um::winuser::{IsClipboardFormatAvailable,GetClipboardData};
-use winapi::um::winbase::{GlobalLock,GlobalUnlock};
+use std::ops::Deref;
+
+use winapi::shared::ntdef::NULL;
+use winapi::um::winbase::{lstrlenW, GlobalLock, GlobalUnlock};
+use winapi::um::winnt::{HANDLE, LPCWSTR};
+use winapi::um::winuser::{GetClipboardData, CF_UNICODETEXT};
+
+use crate::string_from_wchar;
 
 extern "system" {
     pub fn OpenClipboard(hWndNewOwner: u32) -> u32;
@@ -8,40 +13,97 @@ extern "system" {
     pub fn GetLastError() -> u32;
 }
 
-pub struct ClipboardOpener{  }
+fn get_last_error() -> u32 {
+    unsafe { GetLastError() }
+}
 
-impl ClipboardOpener {
-    pub fn new(hWndNewOwner: Option<u32>) -> Result<ClipboardOpener,u32> {
+pub struct ClipboardGuard {}
+
+impl ClipboardGuard {
+    pub fn new(hWndNewOwner: Option<u32>) -> Result<ClipboardGuard, u32> {
         unsafe {
             match OpenClipboard(hWndNewOwner.unwrap_or(0)) {
                 0 => {
                     let err = GetLastError();
                     println!("Clipboard failed to open: {}", err);
                     Err(err)
-                },
+                }
                 _ => {
                     println!("Clipboard is open");
-                    Ok(ClipboardOpener{})
+                    Ok(ClipboardGuard {})
                 }
             }
         }
     }
-}
 
-impl Drop for ClipboardOpener {
-    fn drop(&mut self) {
-        unsafe { CloseClipboard(); }
+    pub fn get_clipboard_text<'a>(&'a self) -> Result<ClipboardTextData<'a>, u32> {
+        let data = unsafe { GetClipboardData(CF_UNICODETEXT) };
+        match data {
+            NULL => {
+                let err = get_last_error();
+                println!("No text on clipboard: {}", err);
+                Err(err)
+            }
+            h => Ok(ClipboardTextData {
+                data_handle: h,
+                _clipboard: self,
+            }),
+        }
     }
 }
 
+impl Drop for ClipboardGuard {
+    fn drop(&mut self) {
+        unsafe {
+            CloseClipboard();
+        }
+    }
+}
 
-// extern "system" {
+pub struct ClipboardTextData<'a> {
+    _clipboard: &'a ClipboardGuard,
+    data_handle: HANDLE,
+}
 
-//     pub fn IsClipboardFormatAvailable(format: u32) -> u32;
+impl<'a> ClipboardTextData<'a> {
+    pub fn lock_data(&'a self) -> Result<GlobalLockGuard<'a>, u32> {
+        let text_ptr = unsafe { GlobalLock(self.data_handle) };
+        match text_ptr {
+            NULL => {
+                let err = get_last_error();
+                println!("Unable to lock clipboard data: {}", err);
+                Err(err)
+            }
+            h => Ok(GlobalLockGuard {
+                clpbd_data: self,
+                text: h as LPCWSTR,
+            }),
+        }
+    }
+}
 
-//     pub fn GetClipboardData(format: u32) -> u32;
+pub struct GlobalLockGuard<'a> {
+    clpbd_data: &'a ClipboardTextData<'a>,
+    text: LPCWSTR,
+}
 
-//     pub fn GlobalLock(hMem: u32) -> *mut c_void;
+impl<'a> Drop for GlobalLockGuard<'a> {
+    fn drop(&mut self) {
+        unsafe {
+            GlobalUnlock(self.clpbd_data.data_handle);
+        }
+    }
+}
 
-//     pub fn GlobalUnlock(hMem: u32);
-// }
+impl<'a> Deref for GlobalLockGuard<'a> {
+    type Target = LPCWSTR;
+
+    fn deref(&self) -> &LPCWSTR {
+        &self.text
+    }
+}
+
+pub fn string_from_lpcwstr(text_ptr: LPCWSTR) -> Result<String, ()> {
+    let str_len = unsafe { lstrlenW(text_ptr) };
+    string_from_wchar(text_ptr, str_len as usize)
+}
