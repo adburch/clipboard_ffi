@@ -55,10 +55,3 @@ pub fn string_from_wchar(ptr: *const u16, len: usize) -> Result<String, ()> {
     str_os.into_string().map_err(|_| ())
 }
 
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn it_works() {
-        assert_eq!(2 + 2, 4);
-    }
-}

@@ -20,9 +20,9 @@ fn get_last_error() -> u32 {
 pub struct ClipboardGuard {}
 
 impl ClipboardGuard {
-    pub fn new(hWndNewOwner: Option<u32>) -> Result<ClipboardGuard, u32> {
+    pub fn new(h_wnd_new_owner: Option<u32>) -> Result<ClipboardGuard, u32> {
         unsafe {
-            match OpenClipboard(hWndNewOwner.unwrap_or(0)) {
+            match OpenClipboard(h_wnd_new_owner.unwrap_or(0)) {
                 0 => {
                     let err = GetLastError();
                     println!("Clipboard failed to open: {}", err);
