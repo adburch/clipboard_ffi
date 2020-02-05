@@ -15,14 +15,19 @@ pub extern "C" fn print_clipboard_file(filename: *const u16, len: usize) {
         println!("filename is incorrect")
     }
 
-    unsafe {
-    match OpenClipboard(0) {
-        0 => println!("Clipboard failed to open: {}", GetLastError()),
-        _ => println!("Clipboard is open")
-    }
+    // unsafe {
+    // match OpenClipboard(0) {
+    //     0 => println!("Clipboard failed to open: {}", GetLastError()),
+    //     _ => println!("Clipboard is open")
+    // }
 
-    CloseClipboard();
-    }
+    // CloseClipboard();
+    // }
+
+    let clipboard = match ClipboardOpener::new(None) {
+        Ok(c) => c,
+        _ => return,
+    };
 }
 
 #[cfg(test)]
