@@ -13,7 +13,10 @@
           "clipboard.exe",
           "main.cpp",
           "User32.lib",
-          "clipboard_rs/target/debug/clipboard_rs.lib",
+          "ws2_32.lib",
+          "Userenv.lib",
+          "Advapi32.lib",
+          "clipboard_rs/target/x86_64-pc-windows-msvc/debug/clipboard_rs.lib",
         ],
         "group": {
           "kind": "build",
