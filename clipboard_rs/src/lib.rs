@@ -53,11 +53,11 @@ pub extern "C" fn print_clipboard_file(filename: *const u16, len: usize) {
     // file.write_all(clpbd_str.as_bytes()).unwrap();
     // file.sync_all().unwrap();
 
-    let _res = prnt_clpbd_file(&filename);
+    prnt_clpbd_file(&filename).unwrap();
 }
 
 fn prnt_clpbd_file(filename: &str) -> Result<(), ()> {
-    // let clipboard = match ClipboardGuard::new(None) {
+    // let clipboard = match ClipboardGuard::new(Nodne) {
     //     Ok(c) => c,
     //     _ => return,
     // };
@@ -70,6 +70,7 @@ fn prnt_clpbd_file(filename: &str) -> Result<(), ()> {
     let clpbd_txt = clipboard.get_clipboard_text()?;
 
     let clpbd_str = string_from_lpcwstr(*clpbd_txt.lock_data()?)?;
+
     write_text_to_file(filename, &clpbd_str)
 }
 

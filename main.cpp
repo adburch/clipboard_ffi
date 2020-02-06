@@ -52,7 +52,7 @@ ReportError(ErrorRecord Rec)
                    buffer,
                    _countof(buffer),
                    nullptr);
-    fprintf_s(stderr, "%ls:%d: %ls: %ls\n", Rec.File, Rec.LineNumber, Rec.Message, buffer);
+    wprintf_s(L"%ls:%d: %ls: %ls\n", Rec.File, Rec.LineNumber, Rec.Message, buffer);
 }
 
 #define WIDE2(x) L##x

@@ -16,7 +16,7 @@
           "ws2_32.lib",
           "Userenv.lib",
           "Advapi32.lib",
-          "clipboard_rs/target/x86_64-pc-windows-msvc/debug/clipboard_rs.lib",
+          "target/x86_64-pc-windows-msvc/debug/clipboard_rs.lib",
         ],
         "group": {
           "kind": "build",

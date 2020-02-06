@@ -120,8 +120,10 @@ pub fn string_from_lpcwstr(text_ptr: LPCWSTR) -> Result<String, ()> {
 pub fn report_error(msg: &str, error_code: u32, line: u32, file: &str) {
     let mut msg_os = OsString::new();
     msg_os.push(msg);
+    msg_os.push("\0");
     let mut file_os = OsString::new();
     file_os.push(file);
+    file_os.push("\0");
     unsafe {
         ReportError(ErrorRecord {
             Message: msg.as_ptr() as *const u16,
