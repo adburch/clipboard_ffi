@@ -1,5 +1,5 @@
-use std::ops::Deref;
 use std::ffi::OsString;
+use std::ops::Deref;
 use std::os::windows::prelude::*;
 
 use winapi::shared::ntdef::NULL;
@@ -75,7 +75,12 @@ impl<'a> ClipboardTextData<'a> {
         match text_ptr {
             NULL => {
                 let err = get_last_error();
-                report_error("Unable to lock clipboard data", err, std::line!(), std::file!());
+                report_error(
+                    "Unable to lock clipboard data",
+                    err,
+                    std::line!(),
+                    std::file!(),
+                );
                 Err(())
             }
             h => Ok(GlobalLockGuard {
@@ -117,5 +122,12 @@ pub fn report_error(msg: &str, error_code: u32, line: u32, file: &str) {
     msg_os.push(msg);
     let mut file_os = OsString::new();
     file_os.push(file);
-    unsafe { ReportError ( ErrorRecord { Message: msg.as_ptr() as *const u16, ErrorCode: error_code, LineNumber: line, File: file.as_ptr() as *const u16 });}
+    unsafe {
+        ReportError(ErrorRecord {
+            Message: msg.as_ptr() as *const u16,
+            ErrorCode: error_code,
+            LineNumber: line,
+            File: file.as_ptr() as *const u16,
+        });
+    }
 }

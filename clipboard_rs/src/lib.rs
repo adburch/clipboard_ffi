@@ -18,7 +18,12 @@ pub extern "C" fn print_clipboard_file(filename: *const u16, len: usize) {
             f
         }
         Err(_) => {
-            report_error("filename is incorrect", 0xffffffff, std::line!(), std::file!());
+            report_error(
+                "filename is incorrect",
+                0xffffffff,
+                std::line!(),
+                std::file!(),
+            );
             return;
         }
     };
@@ -47,6 +52,8 @@ pub extern "C" fn print_clipboard_file(filename: *const u16, len: usize) {
     // let mut file = File::create(filename).unwrap();
     // file.write_all(clpbd_str.as_bytes()).unwrap();
     // file.sync_all().unwrap();
+
+    let _res = prnt_clpbd_file(&filename);
 }
 
 fn prnt_clpbd_file(filename: &str) -> Result<(), ()> {
@@ -63,17 +70,34 @@ fn prnt_clpbd_file(filename: &str) -> Result<(), ()> {
     let clpbd_txt = clipboard.get_clipboard_text()?;
 
     let clpbd_str = string_from_lpcwstr(*clpbd_txt.lock_data()?)?;
-    write_text_to_file(filename, &clpbd_str)    
+    write_text_to_file(filename, &clpbd_str)
 }
 
-fn write_text_to_file(filename: &str, text: &str) -> Result<(), ()>
-{
-    let mut file = 
-        File::create(filename)
-        .map_err(
-            |e| {report_error("Failed to open file", e.raw_os_error().unwrap_or(-1) as u32, std::line!(), std::file!())})?;
-    file.write_all(text.as_bytes()).map_err(|e| {report_error("Failed to write to file", e.raw_os_error().unwrap_or(-1) as u32, std::line!(), std::file!())})?;
-    file.sync_all().map_err(|e| {report_error("Failed to sync file", e.raw_os_error().unwrap_or(-1) as u32, std::line!(), std::file!())})
+fn write_text_to_file(filename: &str, text: &str) -> Result<(), ()> {
+    let mut file = File::create(filename).map_err(|e| {
+        report_error(
+            "Failed to open file",
+            e.raw_os_error().unwrap_or(-1) as u32,
+            std::line!(),
+            std::file!(),
+        )
+    })?;
+    file.write_all(text.as_bytes()).map_err(|e| {
+        report_error(
+            "Failed to write to file",
+            e.raw_os_error().unwrap_or(-1) as u32,
+            std::line!(),
+            std::file!(),
+        )
+    })?;
+    file.sync_all().map_err(|e| {
+        report_error(
+            "Failed to sync file",
+            e.raw_os_error().unwrap_or(-1) as u32,
+            std::line!(),
+            std::file!(),
+        )
+    })
 }
 
 pub fn string_from_wchar(ptr: *const u16, len: usize) -> Result<String, ()> {
