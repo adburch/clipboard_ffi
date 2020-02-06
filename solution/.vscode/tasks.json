@@ -1,0 +1,56 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "msvc build",
+        "type": "shell",
+        "command": "cl.exe",
+        "args": [
+          "/EHsc",
+          "/Zi",
+          "/std:c++17",
+          "/Fo:",
+          "x64/main.obj",
+          "/Fe:",
+          "x64/clipboard.exe",
+          "main.cpp",
+          "User32.lib",
+          "ws2_32.lib",
+          "Userenv.lib",
+          "Advapi32.lib",
+          "target/x86_64-pc-windows-msvc/debug/clipboard_rs.lib",
+          "/link",
+          "/pdb:x64/clipboard.pdb",
+
+        ],
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        },
+        "presentation": {
+          "reveal": "always"
+        },
+        "problemMatcher": "$msCompile"
+      },
+      {
+        "label": "cargo build",
+        "type": "shell",
+        "command": "cargo.exe",
+        "args": [
+          "build",
+          "--manifest-path",
+          "clipboard_rs/Cargo.toml",
+          "--target",
+          "x86_64-pc-windows-msvc"
+        ],
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        },
+        "presentation": {
+          "reveal": "always"
+        },
+        "problemMatcher": "$msCompile"
+      }
+    ]
+  }

@@ -5,34 +5,68 @@
 
 #include <windows.h>
 
+#include "ErrorRecord.hpp"
+
+extern "C"
+{
+    void
+    print_clipboard_file(
+        PCWCHAR filename,
+        SIZE_T len
+    );
+}
+
 
 [[noreturn]] void
 Usage()
 {
     wprintf_s(L"Usage: clipboard <command> [options...]\n");
     wprintf_s(L"\n");
-    wprintf_s(L"paste [-file <filename> -A | -W]\n");
+    wprintf_s(L"paste [-file <filename>]\n");
     wprintf_s(L"    Prints the current contents of the clipboard.\n");
     wprintf_s(L"    If -file, prints the contents to the specified file.\n");
-    wprintf_s(L"    -A indicates ANSI text, -W indicates UNICODE text.\n");
     wprintf_s(L"\n");
-    wprintf_s(L"copy -file <filename> [-A | -W]\n");
+    wprintf_s(L"copy -file <filename>\n");
     wprintf_s(L"    Copies the contents of <filename> to the clipboard as text.\n");
-    wprintf_s(L"    -A indicates ANSI text, -W indicates UNICODE text.\n");
     wprintf_s(L"\n");
     wprintf_s(L"copy -text \"<text>\"\n");
     wprintf_s(L"    Copies the provided string to the clipboard as text.\n");
     wprintf_s(L"\n");
-    wprintf_s(L"log -file <filename> [-A | -W]\n");
+    wprintf_s(L"log -file <filename>\n");
     wprintf_s(L"    While clipboard.exe is running, appends anything copied to\n");
     wprintf_s(L"    the clipboard to <filename>\n");
     wprintf_s(L"\n");
-    wprintf_s(L"When interacting with a file, -A indicates ANSI text.\n");
-    wprintf_s(L"The program will default UNICODE text otherwise.\n");
     exit(1);
 }
 
 const std::set<std::wstring> c_FlagsWithArguments{ L"-file", L"-text" };
+
+void
+ReportError(ErrorRecord Rec)
+{
+    wchar_t buffer[256]{};
+    FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+                   nullptr,
+                   Rec.ErrorCode,
+                   0,
+                   buffer,
+                   _countof(buffer),
+                   nullptr);
+    wprintf_s(L"%ls:%d: %ls: %ls\n", Rec.File, Rec.LineNumber, Rec.Message, buffer);
+}
+
+#define WIDE2(x) L##x
+#define WIDE1(x) WIDE2(x)
+#define WFILE WIDE1(__FILE__)
+
+#define ReportErr( Msg, Code) { \
+    ErrorRecord e{}; \
+    e.Message = Msg; \
+    e.ErrorCode = Code; \
+    e.LineNumber = __LINE__; \
+    e.File = WFILE; \
+    ReportError(e); \
+}
 
 void
 PrintClipboardText()
@@ -40,16 +74,8 @@ PrintClipboardText()
     auto success = OpenClipboard(nullptr);
     if (!success)
     {
-       auto error = GetLastError();
-       wprintf_s(L"Failed to open clipboard: %x", error);
+       ReportErr(L"Failed to open clipboard", GetLastError());
        return;
-    }
-
-    if (!IsClipboardFormatAvailable(CF_UNICODETEXT))
-    {
-        auto error = GetLastError();
-        wprintf_s(L"No text on clipboard: %x", error);
-        return;
     }
 
     auto hglb = GetClipboardData(CF_UNICODETEXT);
@@ -58,9 +84,15 @@ PrintClipboardText()
         LPCWSTR text = (LPCWSTR)GlobalLock(hglb);
         if (text != NULL)
         {
-            wprintf_s(L"Clipboard data: %wS", text);
+            wprintf_s(L"Clipboard data:\n\n%wS\n", text);
             GlobalUnlock(hglb);
         }
+    }
+    else
+    {
+        ReportErr(L"No text on clipboard", GetLastError());
+        return;
+
     }
     CloseClipboard();
 
@@ -150,6 +182,7 @@ int wmain(int argc, const wchar_t** argv)
         else
         {
             // Print to a file
+            print_clipboard_file(filename.c_str(), filename.length());
         }
     }
     else if (!_wcsicmp(command, L"copy"))
