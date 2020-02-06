@@ -1,2 +1,8 @@
 [workspace]
 members = ["clipboard_rs"]
+
+[profile.dev]
+panic = "abort"
+
+[profile.release]
+panic = "abort"
