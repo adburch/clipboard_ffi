@@ -5,6 +5,8 @@ use winapi::um::winbase::{lstrlenW, GlobalLock, GlobalUnlock};
 use winapi::um::winnt::{HANDLE, LPCWSTR};
 use winapi::um::winuser::{GetClipboardData, CF_UNICODETEXT};
 
+include!(concat!(env!("OUT_DIR"), "/generated_bindings.rs"));
+
 use crate::string_from_wchar;
 
 extern "system" {

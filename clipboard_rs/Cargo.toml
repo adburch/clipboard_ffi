@@ -18,3 +18,5 @@ crate-type = ["staticlib"]
 [dependencies]
 winapi = {version ="0.3.8", features = ["minwindef", "ntdef", "winbase", "winnt", "winuser"]}
 
+[build-dependencies]
+bindgen = "0.53.1"

@@ -5,6 +5,8 @@
 
 #include <windows.h>
 
+#include "ErrorRecord.h"
+
 extern "C"
 {
     void
@@ -42,14 +44,6 @@ Usage()
 }
 
 const std::set<std::wstring> c_FlagsWithArguments{ L"-file", L"-text" };
-
-struct ErrorRecord
-{
-    PCWSTR Message;
-    DWORD ErrorCode;
-    DWORD LineNumber;
-    PSTR Function;
-};
 
 void
 ReportError(ErrorRecord Rec)
@@ -89,7 +83,7 @@ PrintClipboardText()
             GlobalUnlock(hglb);
         }
     }
-    else 
+    else
     {
         ReportErr(L"No text on clipboard", GetLastError());
         return;

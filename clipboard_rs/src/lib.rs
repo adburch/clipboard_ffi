@@ -54,4 +54,3 @@ pub fn string_from_wchar(ptr: *const u16, len: usize) -> Result<String, ()> {
     let str_os = OsString::from_wide(wchar_slice);
     str_os.into_string().map_err(|_| ())
 }
-
