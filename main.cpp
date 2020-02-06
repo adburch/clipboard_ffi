@@ -5,7 +5,7 @@
 
 #include <windows.h>
 
-#include "ErrorRecord.h"
+#include "ErrorRecord.hpp"
 
 extern "C"
 {
@@ -56,11 +56,20 @@ ReportError(ErrorRecord Rec)
                    buffer,
                    _countof(buffer),
                    nullptr);
-    fprintf_s(stderr, "%s:%d: %ls: %ls\n", Rec.Function, Rec.LineNumber, Rec.Message, buffer);
+    fprintf_s(stderr, "%ls:%d: %ls: %ls\n", Rec.File, Rec.LineNumber, Rec.Message, buffer);
 }
 
+#define WIDE2(x) L##x
+#define WIDE1(x) WIDE2(x)
+#define WFILE WIDE1(__FILE__)
+
 #define ReportErr( Msg, Code) { \
-    ReportError( { Msg, Code, (DWORD)__LINE__, __FUNCTION__}); \
+    ErrorRecord e{}; \
+    e.Message = Msg; \
+    e.ErrorCode = Code; \
+    e.LineNumber = __LINE__; \
+    e.File = WFILE; \
+    ReportError(e); \
 }
 
 void

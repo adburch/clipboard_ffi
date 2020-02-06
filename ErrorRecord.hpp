@@ -5,7 +5,7 @@ struct ErrorRecord
     PCWSTR Message;
     DWORD ErrorCode;
     DWORD LineNumber;
-    PSTR Function;
+    PCWSTR File;
 };
 
 void
