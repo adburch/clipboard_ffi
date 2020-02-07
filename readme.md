@@ -44,14 +44,14 @@ You will need to fill out the `print_clipboard_file` file in [lib.rs](./start-he
 which demonstrates the usage of the Clipboard APIs.
 
 Here's a suggested sequence of steps to accomplish this:
-    1) Call `print_clipboard_file` from main.cpp (hint: you'll need a function definition in C, not C++).
-    2) Translate the filename string to Rust (use std::os::windows::prelude::* and std::ffi::OsString).
-    3) Write some bindings for OpenClipboard, CloseClipboard, and GetLastError in bindings.rs.
-    4) Write a wrapper struct for OpenClipboard and CloseClipboard (hint: impl the `Drop` trait)
-    5) Use the [winapi](https://crates.io/crates/winapi) crate for GetClipboardData, GlobalLock, and GlobalUnlock.
-    6) Write wrappers for GetClipboardData and the GlobalLock functions (hint: use lifetimes and references to keep your code safe)
-    7) Use bindgen to generate Rust bindings for the ErrorRecord.hpp file (see [build.rs](./start-here/clipboard_rs/build.rs))
-    8) Implement the rest of the clipboard.exe commands
+    1. Call `print_clipboard_file` from main.cpp (hint: you'll need a function definition in C, not C++).
+    2. Translate the filename string to Rust (use std::os::windows::prelude::* and std::ffi::OsString).
+    3. Write some bindings for OpenClipboard, CloseClipboard, and GetLastError in bindings.rs.
+    4. Write a wrapper struct for OpenClipboard and CloseClipboard (hint: impl the `Drop` trait)
+    5. Use the [winapi](https://crates.io/crates/winapi) crate for GetClipboardData, GlobalLock, and GlobalUnlock.
+    6. Write wrappers for GetClipboardData and the GlobalLock functions (hint: use lifetimes and references to keep your code safe)
+    7. Use bindgen to generate Rust bindings for the ErrorRecord.hpp file (see [build.rs](./start-here/clipboard_rs/build.rs))
+    8. Implement the rest of the clipboard.exe commands
 
 
 ## Additional Resources for FFI
