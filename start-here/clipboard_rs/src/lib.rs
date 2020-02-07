@@ -7,6 +7,8 @@ mod bindings;
 
 // use bindings::*;
 
+
+/// Print the contents of the clipboard to filename
 // #[no_mangle]
 pub extern "C" fn print_clipboard_file(_filename: *const u16, _len: usize) {
 
