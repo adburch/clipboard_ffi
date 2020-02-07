@@ -1,0 +1,8 @@
+{
+    "C_Cpp.intelliSenseEngineFallback": "Enabled",
+    "files.associations": {
+        "*.w": "cpp",
+        "xtree": "cpp",
+        "xstring": "cpp"
+    }
+}
