@@ -1,4 +1,4 @@
-use std::ffi::OsString;
+use std::ffi::CString;
 use std::ops::Deref;
 use std::os::windows::prelude::*;
 
@@ -118,18 +118,14 @@ pub fn string_from_lpcwstr(text_ptr: LPCWSTR) -> Result<String, ()> {
 }
 
 pub fn report_error(msg: &str, error_code: u32, line: u32, file: &str) {
-    let mut msg_os = OsString::new();
-    msg_os.push(msg);
-    msg_os.push("\0");
-    let mut file_os = OsString::new();
-    file_os.push(file);
-    file_os.push("\0");
+    let msg_os = CString::new(msg).unwrap();
+    let file_os = CString::new(file).unwrap();
     unsafe {
         ReportError(ErrorRecord {
-            Message: msg.as_ptr() as *const u16,
+            Message: msg_os.as_bytes_with_nul().as_ptr() as *const i8,
             ErrorCode: error_code,
             LineNumber: line,
-            File: file.as_ptr() as *const u16,
+            File: file_os.as_bytes_with_nul().as_ptr() as *const i8,
         });
     }
 }

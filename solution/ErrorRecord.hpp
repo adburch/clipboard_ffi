@@ -2,10 +2,10 @@
 
 struct ErrorRecord
 {
-    PCWSTR Message;
+    PCSTR Message;
     DWORD ErrorCode;
     DWORD LineNumber;
-    PCWSTR File;
+    PCSTR File;
 };
 
 void

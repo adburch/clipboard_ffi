@@ -14,7 +14,7 @@ pub extern "C" fn print_clipboard_file(filename: *const u16, len: usize) {
     // if let Ok(filename) = filename_os.into_string() {
     let filename = match string_from_wchar(filename, len) {
         Ok(f) => {
-            println!("filename is {}", f);
+            //println!("filename is {}", f);
             f
         }
         Err(_) => {
@@ -53,7 +53,9 @@ pub extern "C" fn print_clipboard_file(filename: *const u16, len: usize) {
     // file.write_all(clpbd_str.as_bytes()).unwrap();
     // file.sync_all().unwrap();
 
-    prnt_clpbd_file(&filename).unwrap();
+    // Possible improvement here would be to collect
+    // the error record at point of failure and then log it here.
+    let _res = prnt_clpbd_file(&filename);
 }
 
 fn prnt_clpbd_file(filename: &str) -> Result<(), ()> {

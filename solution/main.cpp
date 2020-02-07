@@ -52,19 +52,15 @@ ReportError(ErrorRecord Rec)
                    buffer,
                    _countof(buffer),
                    nullptr);
-    wprintf_s(L"%ls:%d: %ls: %ls\n", Rec.File, Rec.LineNumber, Rec.Message, buffer);
+    wprintf_s(L"%hs:%d: %hs: %ls\n", Rec.File, Rec.LineNumber, Rec.Message, buffer);
 }
-
-#define WIDE2(x) L##x
-#define WIDE1(x) WIDE2(x)
-#define WFILE WIDE1(__FILE__)
 
 #define ReportErr( Msg, Code) { \
     ErrorRecord e{}; \
     e.Message = Msg; \
     e.ErrorCode = Code; \
     e.LineNumber = __LINE__; \
-    e.File = WFILE; \
+    e.File = __FILE__; \
     ReportError(e); \
 }
 
@@ -74,7 +70,7 @@ PrintClipboardText()
     auto success = OpenClipboard(nullptr);
     if (!success)
     {
-       ReportErr(L"Failed to open clipboard", GetLastError());
+       ReportErr("Failed to open clipboard", GetLastError());
        return;
     }
 
@@ -90,7 +86,7 @@ PrintClipboardText()
     }
     else
     {
-        ReportErr(L"No text on clipboard", GetLastError());
+        ReportErr("No text on clipboard", GetLastError());
         return;
 
     }
@@ -101,22 +97,20 @@ PrintClipboardText()
 
 /// Checks to see if a filename was passed in as a flag,
 /// extracts it, and checks for -A for ANSI format.
-std::pair<std::wstring, bool>
+std::wstring
 ParseFileFlag(
     std::map<std::wstring, std::wstring>& flags
 )
 {
     // Check if a filename was passed in.
     std::wstring filename;
-    bool useANSItext = false;
     if (flags.find(L"-file") != flags.end())
     {
         filename = flags[L"-file"];
         flags.erase(L"-file");
-        useANSItext = flags.erase(L"-A") > 0;
     }
 
-    return std::make_pair(filename, useANSItext);
+    return filename;
 }
 
 int wmain(int argc, const wchar_t** argv)
@@ -170,8 +164,7 @@ int wmain(int argc, const wchar_t** argv)
     if (!_wcsicmp(command, L"paste"))
     {
         // Check if a filename was specified.
-        auto [filename, useANSItext] = ParseFileFlag(flags);
-
+        auto filename = ParseFileFlag(flags);
         doneArgs();
 
         // If no filename was passed in, print to console.
@@ -187,7 +180,7 @@ int wmain(int argc, const wchar_t** argv)
     }
     else if (!_wcsicmp(command, L"copy"))
     {
-        auto [filename, useANSItext] = ParseFileFlag(flags);
+        auto filename = ParseFileFlag(flags);
         if (!filename.empty())
         {
             doneArgs();
@@ -205,7 +198,7 @@ int wmain(int argc, const wchar_t** argv)
     }
     else if (!_wcsicmp(command, L"log"))
     {
-        auto [filename, useANSItext] = ParseFileFlag(flags);
+        auto filename = ParseFileFlag(flags);
         doneArgs();
 
         // Log clipboard activity to the file
