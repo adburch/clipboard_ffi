@@ -14,9 +14,6 @@ fn main() {
     // let bindings = bindgen::Builder::default()
     //     //The input header we would like to generate bindings for
     //     .header("../ErrorRecord.hpp")
-    //     //whitelist the stuff we care about
-    //     .whitelist_type("ErrorRecord")
-    //     .whitelist_function("ReportError")
     //     //Tell cargo to invalidate the built crate whenever any of the included header files change
     //     .parse_callbacks(Box::new(bindgen::CargoCallbacks))
     //     //Finish the builder and generate the bindings

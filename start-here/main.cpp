@@ -5,8 +5,6 @@
 
 #include <windows.h>
 
-#include "ErrorRecord.hpp"
-
 
 [[noreturn]] void
 Usage()
@@ -31,6 +29,14 @@ Usage()
 }
 
 const std::set<std::wstring> c_FlagsWithArguments{ L"-file", L"-text" };
+
+struct ErrorRecord
+{
+    PCSTR Message;
+    DWORD ErrorCode;
+    DWORD LineNumber;
+    PCSTR File;
+};
 
 void
 ReportError(ErrorRecord Rec)

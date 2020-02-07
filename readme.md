@@ -58,7 +58,9 @@ Here's a suggested sequence of steps to accomplish this:
 
 * [Rustnomicon on FFI](https://doc.rust-lang.org/nomicon/ffi.html) - lots of good informaton, especially helpful on linking.
 * [Rust FFI guid](https://michael-f-bryan.github.io/rust-ffi-guide/) - very helpful guide.
-* [winapi docs](https://docs.rs/winapi/0.3.8/winapi/) - bindings for almost all Windows APIs.
+* [Bindgen user guide](https://rust-lang.github.io/rust-bindgen/)
+* [Bindgen docs](https://docs.rs/bindgen/latest/bindgen/index.html)
+* [winapi docs](https://docs.rs/winapi/latest/winapi/) - bindings for almost all Windows APIs.
 * For this project, [Windows Clipboard documentation](https://docs.microsoft.com/en-us/windows/win32/dataxchg/clipboard)
 
 
